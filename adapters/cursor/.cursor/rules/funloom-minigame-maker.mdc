@@ -1,0 +1,70 @@
+---
+description: Use when creating, adapting, validating, or packaging Funloom-compatible HTML/CSS/JavaScript minigame ZIPs.
+globs: "**/*"
+alwaysApply: false
+---
+
+# Funloom Minigame Maker
+
+Use this rule when the user asks to create, adapt, validate, or package a minigame for the Funloom interactive story creator tool.
+
+## Core Contract
+
+The minigame must be a self-contained web game that can run inside the Funloom player iframe and report exactly one final result:
+
+```js
+parent.postMessage({
+  type: "funloom:minigame:complete",
+  result: "success"
+}, "*");
+```
+
+Default to basic results:
+
+- `success`
+- `failure`
+
+Only add custom result ids when the creator explicitly asks for advanced outcomes and confirms each id, display label, trigger condition, and story meaning. Do not invent extra results. Do not use Chinese result ids. Do not fuzzy-match result names.
+
+## Implementation Rules
+
+- Include a one-shot completion helper so the game cannot emit multiple final results.
+- Keep `success` and `failure` available in every game.
+- Add custom ids such as `perfect` only to explicitly declared code paths.
+- Do not read, write, or assume Funloom story variables in game code.
+- Keep variable mutations and branch exits in the Funloom minigame node.
+- Support PC mouse/keyboard and mobile touch controls.
+- Prefer responsive portrait/landscape layout.
+
+## ZIP Rules
+
+- ZIP root must contain `index.html`.
+- Do not wrap the upload in an extra parent folder.
+- Use relative local paths.
+- Do not rely on external CDN scripts, remote fonts, remote images, or remote APIs.
+- Keep total package size under 50 MB.
+- Prefer ASCII file names for generated assets.
+
+## Validation
+
+If this repository is available, use the bundled scripts:
+
+```bash
+python plugins/funloom-minigame-maker/skills/funloom-minigame-maker/scripts/validate_minigame.py path/to/game-or-zip
+```
+
+For advanced results:
+
+```bash
+python plugins/funloom-minigame-maker/skills/funloom-minigame-maker/scripts/validate_minigame.py path/to/game-or-zip --results success,failure,perfect
+```
+
+Package a source directory:
+
+```bash
+python plugins/funloom-minigame-maker/skills/funloom-minigame-maker/scripts/package_minigame.py path/to/source --name my-game --output output
+```
+
+## Final Response
+
+When delivering work, include the ZIP path, source path, declared result ids, success/failure conditions, custom result conditions, controls, validation result, and Funloom testing steps.

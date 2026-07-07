@@ -1,8 +1,14 @@
 # Funloom Minigame Maker
 
-面向 Funloom 互动影游创作者工具的 Codex 插件，用来生成、改造、检查和打包可上传到小游戏节点的网页小游戏 ZIP。
+面向 Funloom 互动影游创作者工具的小游戏制作助手，用来生成、改造、检查和打包可上传到小游戏节点的网页小游戏 ZIP。
 
-它适合已经在做互动影游的创作者：你告诉 Codex 想要什么玩法、成功失败条件、是否需要特殊通关状态，插件会帮你产出可上传的小游戏包，并给出在 Funloom 里如何配置节点出口和变量变化的说明。
+当前仓库提供三种适配：
+
+| 平台 | 形态 | 入口 |
+| --- | --- | --- |
+| Codex | 插件，内含 skill | `$funloom-minigame-maker` |
+| Claude Code | Agent Skill | 自然语言触发或明确要求使用该 skill |
+| Cursor | Project Rule | 复制 `.mdc` 规则到项目 `.cursor/rules` |
 
 ## 它能做什么
 
@@ -32,11 +38,11 @@
 | `timeout` | 超时 | 时间耗尽 |
 | `draw` | 平局 | 双方条件相同 |
 
-自定义返回值需要你和 Codex 先确认清楚，插件不会自动替你发明新的状态。推荐格式是英文、数字、下划线或短横线，例如 `perfect_clear`、`timeout`、`bad_end`。
+自定义返回值需要你和 AI 助手先确认清楚，插件或规则不会自动替你发明新的状态。推荐格式是英文、数字、下划线或短横线，例如 `perfect_clear`、`timeout`、`bad_end`。
 
 ## 在 Funloom 里怎么配置
 
-1. 在 Codex 里使用 `$funloom-minigame-maker` 生成或改造小游戏 ZIP。
+1. 使用 Codex、Claude 或 Cursor 生成/改造小游戏 ZIP。
 2. 打开 Funloom 互动影游创作者工具，把 ZIP 上传到小游戏资源。
 3. 在剧情画布里创建或选择一个小游戏节点。
 4. 选择刚上传的小游戏资源。
@@ -48,7 +54,7 @@
 
 发布到 Funloom 前，请确保所有已声明的返回状态都有后续连线。试玩阶段可以先警告，但正式发布时未连线出口会阻断上传。
 
-## 安装
+## 安装到 Codex
 
 在 Windows PowerShell 里如果 `codex.ps1` 被执行策略拦截，可以使用 `cmd /c`：
 
@@ -59,30 +65,85 @@ cmd /c codex plugin add funloom-minigame-maker@funloom-codex
 
 安装后开启一个新的 Codex 对话，让插件说明被重新加载。
 
-## 使用示例
+Codex 使用示例：
 
 ```text
 $funloom-minigame-maker 帮我做一个 30 秒内找线索的小游戏，普通版成功/失败两个出口。
 ```
 
-```text
-$funloom-minigame-maker 把这个网页小游戏改成能上传到 Funloom 互动影游创作者工具的 ZIP。
-```
+## 安装到 Claude Code
+
+Claude 适配位于：
 
 ```text
-$funloom-minigame-maker 我需要 success、failure、perfect 三个返回状态，帮我确认字段语义并生成小游戏。
+adapters/claude/skills/funloom-minigame-maker
+```
+
+安装为当前用户可用的 Claude Skill：
+
+```powershell
+New-Item -ItemType Directory -Force "$env:USERPROFILE\.claude\skills"
+Copy-Item -Recurse adapters\claude\skills\funloom-minigame-maker "$env:USERPROFILE\.claude\skills\"
+```
+
+安装为某个项目专用的 Claude Skill：
+
+```powershell
+New-Item -ItemType Directory -Force .claude\skills
+Copy-Item -Recurse adapters\claude\skills\funloom-minigame-maker .claude\skills\
+```
+
+安装后重启 Claude Code 或开启新会话，然后尝试：
+
+```text
+请使用 funloom-minigame-maker skill，帮我做一个普通版成功/失败的 Funloom 小游戏 ZIP。
+```
+
+## 安装到 Cursor
+
+Cursor 适配位于：
+
+```text
+adapters/cursor/.cursor/rules/funloom-minigame-maker.mdc
+```
+
+复制到你正在制作小游戏的项目：
+
+```powershell
+New-Item -ItemType Directory -Force .cursor\rules
+Copy-Item adapters\cursor\.cursor\rules\funloom-minigame-maker.mdc .cursor\rules\
+```
+
+然后在 Cursor 里提出需求，例如：
+
+```text
+请按 Funloom Minigame Maker 规则，把这个网页小游戏改成可上传到 Funloom 的 ZIP。
 ```
 
 ## 更新
 
-插件作者发布更新后，已安装用户可以运行：
+Codex 已安装用户更新：
 
 ```powershell
 cmd /c codex plugin marketplace upgrade funloom-codex
 cmd /c codex plugin add funloom-minigame-maker@funloom-codex
 ```
 
-更新后同样建议开启一个新的 Codex 对话。
+Claude 用户重新复制 `adapters/claude/skills/funloom-minigame-maker` 到 `.claude/skills`。
+
+Cursor 用户重新复制 `adapters/cursor/.cursor/rules/funloom-minigame-maker.mdc` 到目标项目 `.cursor/rules`。
+
+更新后建议开启一个新的 AI 对话。
+
+## 仓库结构
+
+```text
+plugins/funloom-minigame-maker/          Codex 插件
+adapters/claude/skills/funloom-minigame-maker/
+                                         Claude Skill
+adapters/cursor/.cursor/rules/           Cursor Project Rule
+shared/                                  三平台共同遵守的协议摘要
+```
 
 ## 注意事项
 
@@ -90,4 +151,4 @@ cmd /c codex plugin add funloom-minigame-maker@funloom-codex
 - 小游戏源码只负责返回结果值，不直接修改剧情变量。
 - 返回状态 id 要和 Funloom 小游戏节点里声明的 id 完全一致。
 - 未声明的返回值不会自动创建出口。
-- 使用进阶版时，先设计好每个返回状态的剧情意义，再让插件写入小游戏逻辑。
+- 使用进阶版时，先设计好每个返回状态的剧情意义，再让 AI 助手写入小游戏逻辑。

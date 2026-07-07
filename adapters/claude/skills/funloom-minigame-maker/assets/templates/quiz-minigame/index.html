@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Funloom 答题小游戏模板</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: #111827; color: #fff7ed; font-family: system-ui, sans-serif; }
+    body { display: grid; place-items: center; padding: 18px; }
+    main { width: min(720px, 100%); display: grid; gap: 16px; }
+    .card { border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: clamp(18px, 5vw, 30px); background: #1f2937; }
+    h1 { margin: 0 0 10px; font-size: clamp(26px, 7vw, 42px); }
+    p { margin: 0; color: rgba(255,247,237,.74); line-height: 1.65; }
+    .status { display: flex; gap: 10px; flex-wrap: wrap; }
+    .status span { padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,.1); }
+    .answers { display: grid; gap: 10px; }
+    button { min-height: 50px; border: 0; border-radius: 8px; padding: 12px 14px; background: #f59e0b; color: #111827; font: inherit; font-weight: 800; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="status">
+      <span>题目 <strong id="step">1</strong>/5</span>
+      <span>答对 <strong id="correct">0</strong></span>
+      <span>机会 <strong id="lives">2</strong></span>
+    </section>
+    <section class="card">
+      <h1 id="question">准备开始</h1>
+      <p id="hint">答对 4 题成功，机会为 0 失败。</p>
+    </section>
+    <section class="answers" id="answers"></section>
+  </main>
+  <script>
+    const FUNLOOM_ALLOWED_RESULTS = ["success", "failure"];
+    let funloomCompleted = false;
+    function completeFunloomMinigame(result) {
+      if (funloomCompleted) return;
+      if (!FUNLOOM_ALLOWED_RESULTS.includes(result)) return;
+      funloomCompleted = true;
+      parent.postMessage({ type: "funloom:minigame:complete", result }, "*");
+    }
+
+    const questions = [
+      { q: "2 + 3 = ?", a: ["4", "5", "6"], ok: "5" },
+      { q: "哪一个是红色？", a: ["天空", "草地", "番茄"], ok: "番茄" },
+      { q: "HTML 的入口通常是？", a: ["index.html", "save.zip", "cover.png"], ok: "index.html" },
+      { q: "success/failure 由谁返回？", a: ["小游戏", "变量面板", "剧情节点"], ok: "小游戏" },
+      { q: "小游戏变量变化在哪里配置？", a: ["Funloom 小游戏节点", "CSS", "图片文件"], ok: "Funloom 小游戏节点" }
+    ];
+    const stepEl = document.getElementById("step");
+    const correctEl = document.getElementById("correct");
+    const livesEl = document.getElementById("lives");
+    const questionEl = document.getElementById("question");
+    const answersEl = document.getElementById("answers");
+    let index = 0;
+    let correct = 0;
+    let lives = 2;
+
+    function render() {
+      stepEl.textContent = String(Math.min(index + 1, questions.length));
+      correctEl.textContent = String(correct);
+      livesEl.textContent = String(lives);
+      if (correct >= 4) return completeFunloomMinigame("success");
+      if (lives <= 0 || index >= questions.length) return completeFunloomMinigame("failure");
+      const item = questions[index];
+      questionEl.textContent = item.q;
+      answersEl.innerHTML = "";
+      item.a.forEach((answer) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = answer;
+        button.addEventListener("click", () => {
+          if (answer === item.ok) correct += 1;
+          else lives -= 1;
+          index += 1;
+          render();
+        });
+        answersEl.appendChild(button);
+      });
+    }
+    render();
+  </script>
+</body>
+</html>

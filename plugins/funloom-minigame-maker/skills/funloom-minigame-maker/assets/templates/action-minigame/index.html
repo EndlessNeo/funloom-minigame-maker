@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Funloom 动作小游戏模板</title>
+  <style>
+    * { box-sizing: border-box; touch-action: manipulation; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #0f172a; color: white; font-family: system-ui, sans-serif; }
+    main { min-height: 100vh; min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; padding: 12px; }
+    .hud { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .hud span { min-width: 92px; text-align: center; padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,.1); }
+    canvas { width: 100%; height: 100%; min-height: 320px; border-radius: 12px; background: #111827; border: 1px solid rgba(255,255,255,.15); }
+    .controls { display: grid; grid-template-columns: repeat(3, minmax(72px, 1fr)); gap: 8px; width: min(420px, 100%); justify-self: center; }
+    button { min-height: 52px; border: 0; border-radius: 8px; background: #38bdf8; color: #082f49; font: inherit; font-weight: 900; }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hud"><span>时间 <strong id="time">25</strong></span><span>生命 <strong id="lives">3</strong></span></section>
+    <canvas id="game" width="960" height="540"></canvas>
+    <section class="controls">
+      <button id="left" type="button">左</button>
+      <button id="start" type="button">开始</button>
+      <button id="right" type="button">右</button>
+    </section>
+  </main>
+  <script>
+    const FUNLOOM_ALLOWED_RESULTS = ["success", "failure"];
+    let funloomCompleted = false;
+    function completeFunloomMinigame(result) {
+      if (funloomCompleted) return;
+      if (!FUNLOOM_ALLOWED_RESULTS.includes(result)) return;
+      funloomCompleted = true;
+      parent.postMessage({ type: "funloom:minigame:complete", result }, "*");
+    }
+
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+    const timeEl = document.getElementById("time");
+    const livesEl = document.getElementById("lives");
+    const player = { x: 480, y: 478, w: 72, h: 24, speed: 9 };
+    const hazards = [];
+    const keys = new Set();
+    let running = false;
+    let lives = 3;
+    let timeLeft = 25;
+    let lastSpawn = 0;
+    let lastTick = 0;
+
+    function reset() {
+      running = true;
+      lives = 3;
+      timeLeft = 25;
+      hazards.length = 0;
+      lastSpawn = performance.now();
+      lastTick = performance.now();
+      player.x = 480;
+      requestAnimationFrame(loop);
+    }
+
+    function hit(a, b) {
+      return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+    }
+
+    function loop(now) {
+      if (!running) return;
+      if (keys.has("ArrowLeft")) player.x -= player.speed;
+      if (keys.has("ArrowRight")) player.x += player.speed;
+      player.x = Math.max(0, Math.min(canvas.width - player.w, player.x));
+      if (now - lastSpawn > 560) {
+        hazards.push({ x: Math.random() * (canvas.width - 34), y: -40, w: 34, h: 34, speed: 4 + Math.random() * 4 });
+        lastSpawn = now;
+      }
+      if (now - lastTick > 1000) {
+        timeLeft -= 1;
+        lastTick = now;
+      }
+      hazards.forEach((item) => item.y += item.speed);
+      for (let i = hazards.length - 1; i >= 0; i -= 1) {
+        if (hit(player, hazards[i])) {
+          hazards.splice(i, 1);
+          lives -= 1;
+        } else if (hazards[i].y > canvas.height + 40) {
+          hazards.splice(i, 1);
+        }
+      }
+      timeEl.textContent = String(timeLeft);
+      livesEl.textContent = String(lives);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#22c55e";
+      ctx.fillRect(player.x, player.y, player.w, player.h);
+      ctx.fillStyle = "#fb7185";
+      hazards.forEach((item) => ctx.fillRect(item.x, item.y, item.w, item.h));
+      if (lives <= 0) return completeFunloomMinigame("failure");
+      if (timeLeft <= 0) return completeFunloomMinigame("success");
+      requestAnimationFrame(loop);
+    }
+
+    window.addEventListener("keydown", (event) => keys.add(event.key));
+    window.addEventListener("keyup", (event) => keys.delete(event.key));
+    document.getElementById("left").addEventListener("pointerdown", () => keys.add("ArrowLeft"));
+    document.getElementById("left").addEventListener("pointerup", () => keys.delete("ArrowLeft"));
+    document.getElementById("right").addEventListener("pointerdown", () => keys.add("ArrowRight"));
+    document.getElementById("right").addEventListener("pointerup", () => keys.delete("ArrowRight"));
+    document.getElementById("start").addEventListener("click", reset);
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "funloom-codex",
+  "interface": {
+    "displayName": "Funloom Codex"
+  },
+  "plugins": [
+    {
+      "name": "funloom-minigame-maker",
+      "source": {
+        "source": "local",
+        "path": "./plugins/funloom-minigame-maker"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

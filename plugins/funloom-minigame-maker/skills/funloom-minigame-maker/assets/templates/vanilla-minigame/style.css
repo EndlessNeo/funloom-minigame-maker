@@ -1,0 +1,121 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #101318;
+  color: #f7f3e8;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button {
+  font: inherit;
+}
+
+.game-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 12px;
+  padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+}
+
+.hud {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: clamp(14px, 3vw, 18px);
+}
+
+.hud span {
+  min-width: 86px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+
+.stage {
+  position: relative;
+  min-height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    #171c24;
+  background-size: 34px 34px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.target {
+  position: absolute;
+  width: clamp(54px, 12vw, 86px);
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 999px;
+  background: #ff4d6d;
+  box-shadow: 0 0 0 10px rgba(255, 77, 109, 0.18), 0 16px 36px rgba(0, 0, 0, 0.32);
+  transform: translate(-50%, -50%);
+  display: none;
+}
+
+.target:active {
+  transform: translate(-50%, -50%) scale(0.96);
+}
+
+.touch-controls button:active,
+.message button:active {
+  transform: scale(0.96);
+}
+
+.message {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(16, 19, 24, 0.86);
+}
+
+.message h1 {
+  margin: 0;
+  font-size: clamp(28px, 8vw, 48px);
+}
+
+.message p {
+  margin: 0;
+  color: rgba(247, 243, 232, 0.78);
+}
+
+.message button,
+.touch-controls button {
+  min-height: 48px;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  color: #101318;
+  background: #ffd166;
+  font-weight: 700;
+}
+
+.touch-controls {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 900px) {
+  .game-shell {
+    padding-inline: 36px;
+  }
+}

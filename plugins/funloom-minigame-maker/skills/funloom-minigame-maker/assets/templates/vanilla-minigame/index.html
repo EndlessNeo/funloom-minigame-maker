@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Funloom 小游戏模板</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="game-shell">
+    <section class="hud" aria-label="游戏状态">
+      <span>得分 <strong id="score">0</strong></span>
+      <span>生命 <strong id="lives">3</strong></span>
+      <span>时间 <strong id="time">20</strong></span>
+    </section>
+
+    <section class="stage" id="stage" aria-label="游戏区域">
+      <button id="target" class="target" type="button" aria-label="点击目标"></button>
+      <div class="message" id="message">
+        <h1>点击目标</h1>
+        <p>20 秒内拿到 8 分即成功，生命为 0 即失败。</p>
+        <button id="startButton" type="button">开始</button>
+      </div>
+    </section>
+
+    <section class="touch-controls" aria-label="移动端操作">
+      <button id="tapButton" type="button">点击目标</button>
+    </section>
+  </main>
+
+  <script src="./funloom-adapter.js"></script>
+  <script src="./main.js"></script>
+</body>
+</html>

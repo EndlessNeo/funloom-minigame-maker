@@ -8,6 +8,12 @@ alwaysApply: false
 
 Use this rule when the user asks to create, adapt, validate, or package a minigame for the Funloom interactive story creator tool.
 
+## Conversation Rules
+
+- Confirm the plan in chat, not by writing a proposal `.md` and asking the user to open a path.
+- Do not offer browser visual companion, local URL mockups, or host-preview pages as the approval step.
+- Ask for an output directory. If none is provided, suggest `%USERPROFILE%\FunloomMinigames\<game-slug>` on Windows and `~/FunloomMinigames/<game-slug>` on macOS/Linux.
+
 ## Core Contract
 
 The minigame must be a self-contained web game that can run inside the Funloom player iframe and report exactly one final result:
@@ -19,18 +25,18 @@ parent.postMessage({
 }, "*");
 ```
 
-Default to basic results:
+Basic mode uses exactly:
 
 - `success`
 - `failure`
 
-Only add custom result ids when the creator explicitly asks for advanced outcomes and confirms each id, display label, trigger condition, and story meaning. Do not invent extra results. Do not use Chinese result ids. Do not fuzzy-match result names.
+Advanced mode uses only the complete creator-confirmed custom result id set. Do not automatically include `success` or `failure` in advanced mode. Do not invent undeclared results. Do not use Chinese result ids. Do not fuzzy-match result names.
 
 ## Implementation Rules
 
 - Include a one-shot completion helper so the game cannot emit multiple final results.
-- Keep `success` and `failure` available in every game.
-- Add custom ids such as `perfect` only to explicitly declared code paths.
+- Keep `success` and `failure` available in basic games.
+- For advanced games, set `FUNLOOM_ALLOWED_RESULTS` to only the confirmed custom ids, such as `["perfect", "timeout"]`.
 - Do not read, write, or assume Funloom story variables in game code.
 - Keep variable mutations and branch exits in the Funloom minigame node.
 - Support PC mouse/keyboard and mobile touch controls.
@@ -56,7 +62,7 @@ python plugins/funloom-minigame-maker/skills/funloom-minigame-maker/scripts/vali
 For advanced results:
 
 ```bash
-python plugins/funloom-minigame-maker/skills/funloom-minigame-maker/scripts/validate_minigame.py path/to/game-or-zip --results success,failure,perfect
+python plugins/funloom-minigame-maker/skills/funloom-minigame-maker/scripts/validate_minigame.py path/to/game-or-zip --results perfect,timeout
 ```
 
 Package a source directory:
@@ -67,4 +73,4 @@ python plugins/funloom-minigame-maker/skills/funloom-minigame-maker/scripts/pack
 
 ## Final Response
 
-When delivering work, include the ZIP path, source path, declared result ids, success/failure conditions, custom result conditions, controls, validation result, and Funloom testing steps.
+When delivering work, include the ZIP path, source path, result mode, declared result ids and meanings, trigger conditions, controls, validation result, and Funloom testing steps.

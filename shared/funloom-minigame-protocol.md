@@ -1,63 +1,30 @@
-# Funloom Minigame Protocol
+# Funloom Minigame Protocol Summary
 
-This shared reference defines the minigame behavior that all adapters in this repository must preserve.
+Funloom minigames are self-contained HTML/CSS/JavaScript games uploaded as ZIP resources. The ZIP root must contain `index.html`.
 
-## Result Contract
-
-A Funloom minigame reports one final result to the host player:
+The game reports exactly one final result to the Funloom player iframe:
 
 ```js
 parent.postMessage({
   type: "funloom:minigame:complete",
-  result: "success"
+  result
 }, "*");
 ```
 
-Default basic results:
+Use a one-shot helper so the game cannot emit multiple final results.
 
-- `success`: the player cleared the minigame.
-- `failure`: the player failed the minigame.
+## Result Modes
 
-Advanced results are allowed only when the creator explicitly asks for them and confirms:
+Basic mode:
 
-- result id, using ASCII letters, numbers, `_`, or `-`, such as `perfect`;
-- creator-facing label, such as `完美通关`;
-- exact trigger condition in game code;
-- story meaning and expected Funloom minigame node exit.
+- `success`
+- `failure`
 
-Never invent custom result ids automatically. Never fuzzy-match result ids. Never use Chinese result ids.
+Advanced mode:
 
-## Variable Boundary
+- Use only creator-confirmed custom result ids.
+- Do not automatically include `success` or `failure`.
+- Result ids must use ASCII letters, numbers, `_`, or `-`.
+- Chinese text belongs in the creator-facing label inside the Funloom minigame node.
 
-The minigame returns only a result string. It must not read, write, or assume story variables.
-
-Creators configure variable mutations and plot exits on the Funloom minigame node:
-
-1. Upload the ZIP as a minigame resource.
-2. Select the resource in a minigame node.
-3. Keep basic mode for `success` and `failure`, or switch to advanced mode and add creator-confirmed custom ids.
-4. Configure variable mutations for each declared result that needs them.
-5. Connect every declared result exit before publishing.
-
-## ZIP Rules
-
-- ZIP root must contain `index.html`.
-- Do not wrap the game in an extra parent folder.
-- Use relative local paths.
-- Do not depend on remote scripts, fonts, images, or APIs.
-- Keep total package size under 50 MB.
-- Prefer ASCII file names for generated assets.
-
-## Validation
-
-Use the bundled validator whenever possible:
-
-```bash
-python scripts/validate_minigame.py path/to/game-or-zip
-```
-
-For advanced results:
-
-```bash
-python scripts/validate_minigame.py path/to/game-or-zip --results success,failure,perfect
-```
+The minigame source only returns result ids. Story variables, mutations, labels, and branch exits are configured in the Funloom minigame node.

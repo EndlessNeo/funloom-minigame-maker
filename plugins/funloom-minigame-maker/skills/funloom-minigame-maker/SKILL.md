@@ -1,6 +1,6 @@
 ---
 name: funloom-minigame-maker
-description: Create or adapt lightweight HTML/CSS/JavaScript minigames for the Funloom interactive story creator tool's minigame node. Use when the user wants a ZIP that can be uploaded as a Funloom minigame resource, needs an existing web game adapted to return success/failure or explicitly declared custom result states, or asks to validate/package a Funloom-compatible minigame.
+description: Create or adapt lightweight HTML/CSS/JavaScript minigames for the Funloom interactive story creator tool's minigame node. Use when the user wants a ZIP that can be uploaded as a Funloom minigame resource, needs an existing web game adapted to return basic success/failure or creator-confirmed advanced custom result states, or asks to validate/package a Funloom-compatible minigame.
 ---
 
 # Funloom Minigame Maker
@@ -9,45 +9,49 @@ description: Create or adapt lightweight HTML/CSS/JavaScript minigames for the F
 
 Use this skill to create, adapt, validate, and package lightweight web minigames for the Funloom interactive story creator tool's minigame node.
 
-The minigame must run inside the Funloom player iframe. Default to the basic return states `success` and `failure`. If the creator genuinely needs advanced multi-outcome behavior, first help them define the exact custom result ids, labels, trigger conditions, and story semantics. The minigame must not read or write story variables; variables are configured by the creator in the Funloom minigame node.
+The minigame must run inside the Funloom player iframe and report one final result through `parent.postMessage({ type: "funloom:minigame:complete", result }, "*")`. It must not read or write story variables; the creator configures variable mutations and branch exits in the Funloom minigame node.
 
-## Required Workflow
+## Conversation Rules
 
-Before generating or adapting code, establish these decisions with the user. Ask directly when missing; if the user wants you to proceed quickly, choose the default and state it.
+- Keep design approval in the chat. Do not write a separate proposal `.md` file and ask the user to open a path to confirm it.
+- Do not offer or use a browser visual companion, local URL mockup, `test-host.html`, or visual preview page as the planning/approval step.
+- Before writing game code, show a concise chat proposal and ask the user to confirm or edit it. Include:
+  - task type: create, adapt, or validate;
+  - gameplay summary;
+  - asset mode: multi-file ZIP, single-file HTML, or supplied assets;
+  - result mode and exact result ids/labels/trigger conditions;
+  - PC and mobile controls;
+  - orientation: responsive by default, forced landscape only when justified;
+  - output directory.
+- Ask for an output directory in chat. If the user has no preference, recommend:
+  - Windows: `%USERPROFILE%\FunloomMinigames\<game-slug>`
+  - macOS/Linux: `~/FunloomMinigames/<game-slug>`
+  Use the user's custom path if provided.
 
-1. Determine task type:
-   - `create`: build a new minigame from a gameplay idea.
-   - `adapt`: modify existing web game source or ZIP to support the Funloom protocol.
-   - `validate`: inspect and fix an existing minigame package.
-2. Determine asset mode:
-   - `multi-file ZIP` by default.
-   - `single-file HTML` only for simple games without many assets.
-   - `user assets` when the user supplies images, audio, video, or existing source files.
-3. Lock return states:
-   - Default to basic mode with `success` and `failure`.
-   - Success must be a concrete event such as score target, cleared rounds, survived time, or correct answer count.
-   - Failure must be a concrete event such as lives reaching 0, time expiring, wrong answers reaching a limit, or game-over.
-   - Do not invent extra result states by default.
-   - If the user asks for advanced outcomes, help them confirm each custom state before implementation:
-     - result id, using only ASCII letters, numbers, `_`, or `-` (for example `perfect`);
-     - creator-facing label (for example `完美通关`);
-     - exact trigger condition in game code;
-     - story meaning and expected Funloom minigame node exit.
-4. Lock controls and screen posture:
-   - PC must support mouse and/or keyboard.
-   - mobile mini-program WebView must support touch controls.
-   - Default to responsive portrait/landscape support.
-   - Suggest forced landscape only when the gameplay would be much worse otherwise, and document that choice.
-5. Build or adapt the minigame.
-6. Validate with `scripts/validate_minigame.py`.
-7. Package with `scripts/package_minigame.py`.
-8. Tell the user to upload the ZIP to the Funloom interactive story creator tool and test through a real minigame node.
+## Return-State Rules
 
-Do not create a local host simulator or `test-host.html`. Opening `index.html` directly can check whether the game itself runs, but it is not proof that the Funloom minigame node integration works.
+Basic mode:
+
+- Use exactly `success` and `failure`.
+- Success must map to a concrete event such as score target, cleared rounds, survived time, or enough correct answers.
+- Failure must map to a concrete event such as lives reaching 0, time expiring before target, wrong answers reaching a limit, or game over.
+
+Advanced mode:
+
+- Use only the custom result ids confirmed by the creator.
+- Do not automatically include `success` or `failure` in advanced mode.
+- Confirm each advanced result before implementation:
+  - result id, ASCII letters, numbers, `_`, or `-` only, for example `perfect`;
+  - creator-facing label, for example `完美通关`;
+  - exact trigger condition in game code;
+  - story meaning and expected Funloom minigame node exit.
+- Do not invent undeclared result states by default. Do not use Chinese result ids. Do not fuzzy-match result names.
 
 ## Protocol Rules
 
-Every minigame must include a one-shot completion helper:
+Every minigame must include a one-shot completion helper.
+
+Basic example:
 
 ```js
 const FUNLOOM_ALLOWED_RESULTS = ["success", "failure"];
@@ -64,19 +68,11 @@ function completeFunloomMinigame(result) {
 }
 ```
 
-For basic mode, call `completeFunloomMinigame("success")` on success and `completeFunloomMinigame("failure")` on failure.
-
-For advanced mode, only after the creator confirms custom states, add those ids to `FUNLOOM_ALLOWED_RESULTS` and call them from their exact trigger paths. Example:
+Advanced example after creator confirmation:
 
 ```js
-const FUNLOOM_ALLOWED_RESULTS = ["success", "failure", "perfect"];
-
-if (score >= targetScore && mistakes === 0) {
-  completeFunloomMinigame("perfect");
-}
+const FUNLOOM_ALLOWED_RESULTS = ["perfect", "timeout"];
 ```
-
-Do not use fuzzy matching, Chinese result ids, or undeclared result names.
 
 Read `references/protocol.md` when adapting protocol code or debugging completion behavior.
 
@@ -102,27 +98,27 @@ Use templates as starting points, not as final products unless the user asks for
 - `assets/templates/quiz-minigame`: single-file quiz starter.
 - `assets/templates/action-minigame`: single-file movement/avoidance starter with keyboard and touch buttons.
 
-For new games, copy the closest template into the user's requested output/source directory, then customize gameplay, visuals, success/failure thresholds, and copy.
+For new games, copy the closest template into the confirmed output/source directory, then customize gameplay, visuals, result triggers, and copy.
 
 For existing games, preserve original gameplay and assets where possible. Add only the minimum protocol adapter and mobile/iframe fixes needed for Funloom compatibility.
 
-Read `references/game-design.md` for gameplay defaults and dual-end guidance. Read `references/adapting-existing-games.md` for existing-source adaptation.
+Read `references/game-design.md` for gameplay defaults. Read `references/adapting-existing-games.md` for existing-source adaptation.
 
 ## Scripts
 
-Validate a source directory or ZIP:
+Validate a basic source directory or ZIP:
 
 ```bash
 python scripts/validate_minigame.py path/to/game-or-zip
 ```
 
-Validate an advanced package with creator-confirmed result ids:
+Validate an advanced package with creator-confirmed custom result ids:
 
 ```bash
-python scripts/validate_minigame.py path/to/game-or-zip --results success,failure,perfect
+python scripts/validate_minigame.py path/to/game-or-zip --results perfect,timeout
 ```
 
-Package a source directory:
+Package a basic source directory:
 
 ```bash
 python scripts/package_minigame.py path/to/source --name my-game --output output
@@ -131,7 +127,7 @@ python scripts/package_minigame.py path/to/source --name my-game --output output
 Package an advanced source directory:
 
 ```bash
-python scripts/package_minigame.py path/to/source --name my-game --output output --results success,failure,perfect
+python scripts/package_minigame.py path/to/source --name my-game --output output --results perfect,timeout
 ```
 
 The package script writes:
@@ -148,12 +144,16 @@ When delivering a minigame ZIP or adapted source, report:
 
 - ZIP path.
 - Source path.
-- Declared result states and their meanings.
-- Success condition.
-- Failure condition.
-- Custom result conditions, if advanced mode was requested.
+- Result mode: basic or advanced.
+- Declared result ids, labels, trigger conditions, and story meanings.
 - PC controls.
-- mobile controls.
-- whether forced landscape is used.
-- validation command and result.
-- Funloom testing steps: upload the resource, select it in a minigame node, configure variable mutations for declared results, connect every declared exit, and play from an option node. If custom results are used, tell the creator to switch the minigame node to advanced mode and add the exact custom result ids and labels first.
+- Mobile controls.
+- Whether forced landscape is used.
+- Validation command and result.
+- Funloom testing steps:
+  - upload the ZIP to minigame resources;
+  - select it in a minigame node;
+  - keep basic mode for `success` / `failure`, or switch the node to advanced mode and define the complete custom result id and label set first;
+  - configure variable mutations for declared results;
+  - connect every declared exit;
+  - playtest every result path from an option node.

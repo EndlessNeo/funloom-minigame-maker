@@ -20,7 +20,10 @@ def slugify(value: str) -> str:
 
 
 def parse_result_ids(value: str) -> list[str]:
-    result_ids = ["success", "failure"]
+    if not value.strip():
+        return ["success", "failure"]
+
+    result_ids: list[str] = []
     for raw_item in value.split(","):
         item = raw_item.strip()
         if not item:
@@ -58,14 +61,15 @@ def write_integration(
     result_ids: list[str],
 ) -> None:
     result_text = ", ".join(f"`{result_id}`" for result_id in result_ids)
-    custom_results = [
-        result_id for result_id in result_ids if result_id not in {"success", "failure"}
-    ]
+    is_basic_mode = result_ids == ["success", "failure"]
     mode_text = (
-        "Advanced mode: switch the Funloom minigame node to advanced mode and add "
-        f"these custom result ids first: {', '.join(custom_results)}."
-        if custom_results
-        else "Basic mode: keep the default success/failure exits."
+        "Basic mode: keep the default success/failure exits."
+        if is_basic_mode
+        else (
+            "Advanced mode: switch the Funloom minigame node to advanced mode and declare "
+            "exactly this complete custom result set first: "
+            f"{', '.join(result_ids)}."
+        )
     )
     landscape_text = (
         "Yes. Keep the in-game landscape prompt and test landscape playback in the Funloom player."
@@ -127,7 +131,10 @@ def main() -> int:
         "--results",
         default="success,failure",
         type=parse_result_ids,
-        help="Comma-separated declared result ids. success/failure are always included.",
+        help=(
+            "Comma-separated declared result ids. Omit for basic success,failure; "
+            "advanced mode uses exactly the ids provided."
+        ),
     )
     parser.add_argument(
         "--forced-landscape",

@@ -1,6 +1,6 @@
 # ZIP Rules
 
-## Required shape
+## Required Shape
 
 The ZIP root must contain `index.html`.
 
@@ -20,7 +20,7 @@ my-game/index.html
 my-game/style.css
 ```
 
-## Resource rules
+## Resource Rules
 
 - Keep all resources inside the ZIP.
 - Use relative paths such as `./style.css`, `main.js`, `assets/player.png`.
@@ -30,7 +30,7 @@ my-game/style.css
 - Prefer ASCII file names for generated files.
 - Existing Chinese file names are acceptable when references are relative and validation passes.
 
-## Delivery rule
+## Delivery Rule
 
 The real integration test is uploading the ZIP to the Funloom interactive story creator tool:
 
@@ -38,6 +38,8 @@ The real integration test is uploading the ZIP to the Funloom interactive story 
 2. Upload the ZIP in the minigame resources area.
 3. Create or select a minigame node.
 4. Select the uploaded resource.
-5. Configure variable mutations for the declared result states.
-6. Connect every declared exit. Basic mode has `success` and `failure`; advanced mode also needs each custom id, such as `perfect`.
-7. Enter the minigame from an option node and verify both branches.
+5. For basic mode, keep the default `success` and `failure` exits.
+6. For advanced mode, switch the node to advanced mode and declare the complete custom result id and label set confirmed in chat.
+7. Configure variable mutations for every declared result that needs them.
+8. Connect every declared result exit before publishing to Funloom.
+9. Enter the minigame from an option node and verify every declared result path.

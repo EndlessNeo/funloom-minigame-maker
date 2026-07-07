@@ -47,7 +47,10 @@ def warn(message: str) -> None:
 
 
 def parse_result_ids(value: str) -> list[str]:
-    result_ids = ["success", "failure"]
+    if not value.strip():
+        return ["success", "failure"]
+
+    result_ids: list[str] = []
     for raw_item in value.split(","):
         item = raw_item.strip()
         if not item:
@@ -218,7 +221,10 @@ def main() -> int:
         "--results",
         default="success,failure",
         type=parse_result_ids,
-        help="Comma-separated declared result ids. success/failure are always included.",
+        help=(
+            "Comma-separated declared result ids. Omit for basic success,failure; "
+            "advanced mode uses exactly the ids provided."
+        ),
     )
     args = parser.parse_args()
     return validate(Path(args.path).resolve(), args.results)

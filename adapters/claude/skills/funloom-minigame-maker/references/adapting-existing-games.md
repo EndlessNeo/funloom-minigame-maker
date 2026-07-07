@@ -1,16 +1,16 @@
 # Adapting Existing Games
 
-## Preserve first
+## Preserve First
 
 Keep the original game structure, visuals, and gameplay whenever possible. Add only what is needed for Funloom compatibility:
 
 - one-shot completion helper,
-- calls to return `success` and `failure` by default,
+- result calls for the confirmed basic or advanced mode,
 - relative resource paths,
 - mobile controls if missing,
 - iframe responsive sizing.
 
-## Find existing outcomes
+## Find Existing Outcomes
 
 Trace the existing game logic:
 
@@ -20,13 +20,14 @@ Trace the existing game logic:
 - game over,
 - lives,
 - timer,
-- wrong-answer counter.
+- wrong-answer counter,
+- rank or special clear state.
 
-Wire the original success path to `completeFunloomMinigame("success")` and the original failure path to `completeFunloomMinigame("failure")`.
+For basic mode, wire the original success path to `completeFunloomMinigame("success")` and the original failure path to `completeFunloomMinigame("failure")`.
 
-If the existing game has meaningful extra outcomes, such as perfect clear, timeout, draw, rank, or special loss, do not choose result ids automatically. Ask the creator whether they want the Funloom minigame node in advanced mode. If yes, confirm each custom result id, display label, trigger condition, and story meaning before changing the code.
+For advanced mode, do not keep `success` or `failure` automatically. Ask the creator to confirm every custom result id, display label, trigger condition, and story meaning, then wire only those confirmed ids.
 
-## Common fixes
+## Common Fixes
 
 - Replace absolute local paths with relative paths.
 - Remove remote CDN dependencies or inline/download the needed code.

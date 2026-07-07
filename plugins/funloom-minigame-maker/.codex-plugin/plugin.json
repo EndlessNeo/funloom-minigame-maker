@@ -1,21 +1,21 @@
 {
   "name": "funloom-minigame-maker",
-  "version": "0.1.0",
-  "description": "Create, adapt, validate, and package Funloom/002 iframe minigames.",
+  "version": "0.1.1",
+  "description": "Create, adapt, validate, and package minigames for the Funloom interactive story creator tool.",
   "author": {
     "name": "Neo"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Funloom Minigame Maker",
-    "shortDescription": "Build ZIP minigames for the 002 minigame node.",
-    "longDescription": "Create or adapt lightweight HTML/CSS/JavaScript minigames that run inside the Funloom/002 minigame iframe. The skill validates ZIP shape, packages source directories, and guides basic success/failure or creator-confirmed advanced result states such as perfect.",
+    "shortDescription": "Build ZIP minigames for Funloom minigame nodes.",
+    "longDescription": "Create or adapt lightweight HTML/CSS/JavaScript minigames for the Funloom interactive story creator tool. The skill validates ZIP shape, packages source directories, and guides basic success/failure or creator-confirmed advanced result states such as perfect.",
     "developerName": "Neo",
     "category": "Developer Tools",
     "capabilities": ["Write", "Interactive"],
     "defaultPrompt": [
       "Create a Funloom-compatible minigame ZIP.",
-      "Adapt this web game for the 002 minigame node.",
+      "Adapt this web game for a Funloom minigame node.",
       "Validate and package this minigame source."
     ]
   }

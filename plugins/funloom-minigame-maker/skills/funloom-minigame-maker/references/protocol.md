@@ -13,9 +13,9 @@ parent.postMessage({
 
 By default, `result` is `success` or `failure`.
 
-In advanced mode, the creator may declare additional result ids on the 002 minigame node, such as `perfect`. Only use custom ids after the creator confirms their exact spelling, display label, trigger condition, and story meaning.
+In advanced mode, the creator may declare additional result ids on the Funloom minigame node, such as `perfect`. Only use custom ids after the creator confirms their exact spelling, display label, trigger condition, and story meaning.
 
-The minigame must not read, mutate, or assume story variables. The 002 creator configures variable mutations on the minigame node.
+The minigame must not read, mutate, or assume story variables. The creator configures variable mutations on the Funloom minigame node.
 
 ## One-shot helper
 
@@ -56,7 +56,7 @@ if (score >= targetScore && mistakes === 0) {
 ## What not to do
 
 - Do not send undeclared custom result names.
-- Do not use Chinese result ids; use Chinese only for the creator-facing label in the 002 node.
+- Do not use Chinese result ids; use Chinese only for the creator-facing label in the Funloom minigame node.
 - Do not infer or fuzzy-match result ids.
 - Do not send multiple results.
 - Do not call platform APIs.

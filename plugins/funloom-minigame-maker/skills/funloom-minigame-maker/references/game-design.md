@@ -15,7 +15,7 @@ If the user does not provide thresholds, choose a short testable target and stat
 Only propose advanced custom results when the game design genuinely has more than two meaningful outcomes, or when the creator asks for them. Before implementing custom results, confirm:
 
 - result id: ASCII letters, numbers, `_`, or `-` only, such as `perfect`;
-- display label: creator-facing text in 002, such as `完美通关`;
+- display label: creator-facing text in Funloom, such as `完美通关`;
 - trigger condition: exact code condition that returns this id;
 - story meaning: what branch or variable changes this state is meant to drive.
 

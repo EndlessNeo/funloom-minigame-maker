@@ -1,15 +1,15 @@
 ---
 name: funloom-minigame-maker
-description: Create or adapt lightweight HTML/CSS/JavaScript minigames for the Funloom/002 interactive video minigame node. Use when the user wants a ZIP that can be uploaded to the 002 minigame resource, needs an existing web game adapted to return success/failure or explicitly declared custom result states, or asks to validate/package a Funloom-compatible minigame.
+description: Create or adapt lightweight HTML/CSS/JavaScript minigames for the Funloom interactive story creator tool's minigame node. Use when the user wants a ZIP that can be uploaded as a Funloom minigame resource, needs an existing web game adapted to return success/failure or explicitly declared custom result states, or asks to validate/package a Funloom-compatible minigame.
 ---
 
 # Funloom Minigame Maker
 
 ## Overview
 
-Use this skill to create, adapt, validate, and package lightweight web minigames for the Funloom/002 interactive video minigame node.
+Use this skill to create, adapt, validate, and package lightweight web minigames for the Funloom interactive story creator tool's minigame node.
 
-The minigame must run inside the 002/player iframe. Default to the basic return states `success` and `failure`. If the creator genuinely needs advanced multi-outcome behavior, first help them define the exact custom result ids, labels, trigger conditions, and story semantics. The minigame must not read or write story variables; variables are configured by the creator in the 002 minigame node.
+The minigame must run inside the Funloom player iframe. Default to the basic return states `success` and `failure`. If the creator genuinely needs advanced multi-outcome behavior, first help them define the exact custom result ids, labels, trigger conditions, and story semantics. The minigame must not read or write story variables; variables are configured by the creator in the Funloom minigame node.
 
 ## Required Workflow
 
@@ -32,7 +32,7 @@ Before generating or adapting code, establish these decisions with the user. Ask
      - result id, using only ASCII letters, numbers, `_`, or `-` (for example `perfect`);
      - creator-facing label (for example `完美通关`);
      - exact trigger condition in game code;
-     - story meaning and expected 002 node exit.
+     - story meaning and expected Funloom minigame node exit.
 4. Lock controls and screen posture:
    - PC must support mouse and/or keyboard.
    - mobile mini-program WebView must support touch controls.
@@ -41,9 +41,9 @@ Before generating or adapting code, establish these decisions with the user. Ask
 5. Build or adapt the minigame.
 6. Validate with `scripts/validate_minigame.py`.
 7. Package with `scripts/package_minigame.py`.
-8. Tell the user to upload the ZIP to the 002 interactive video tool and test through a real minigame node.
+8. Tell the user to upload the ZIP to the Funloom interactive story creator tool and test through a real minigame node.
 
-Do not create a local host simulator or `test-host.html`. Opening `index.html` directly can check whether the game itself runs, but it is not proof that the 002 node integration works.
+Do not create a local host simulator or `test-host.html`. Opening `index.html` directly can check whether the game itself runs, but it is not proof that the Funloom minigame node integration works.
 
 ## Protocol Rules
 
@@ -104,7 +104,7 @@ Use templates as starting points, not as final products unless the user asks for
 
 For new games, copy the closest template into the user's requested output/source directory, then customize gameplay, visuals, success/failure thresholds, and copy.
 
-For existing games, preserve original gameplay and assets where possible. Add only the minimum protocol adapter and mobile/iframe fixes needed for 002 compatibility.
+For existing games, preserve original gameplay and assets where possible. Add only the minimum protocol adapter and mobile/iframe fixes needed for Funloom compatibility.
 
 Read `references/game-design.md` for gameplay defaults and dual-end guidance. Read `references/adapting-existing-games.md` for existing-source adaptation.
 
@@ -156,4 +156,4 @@ When delivering a minigame ZIP or adapted source, report:
 - mobile controls.
 - whether forced landscape is used.
 - validation command and result.
-- 002 testing steps: upload resource, select it in a minigame node, configure variable mutations for declared results, connect every declared exit, and play from an option node. If custom results are used, tell the creator to switch the minigame node to advanced mode and add the exact custom result ids and labels first.
+- Funloom testing steps: upload the resource, select it in a minigame node, configure variable mutations for declared results, connect every declared exit, and play from an option node. If custom results are used, tell the creator to switch the minigame node to advanced mode and add the exact custom result ids and labels first.

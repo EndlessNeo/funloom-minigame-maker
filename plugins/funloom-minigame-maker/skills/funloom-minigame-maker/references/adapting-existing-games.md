@@ -24,7 +24,7 @@ Trace the existing game logic:
 
 Wire the original success path to `completeFunloomMinigame("success")` and the original failure path to `completeFunloomMinigame("failure")`.
 
-If the existing game has meaningful extra outcomes, such as perfect clear, timeout, draw, rank, or special loss, do not choose result ids automatically. Ask the creator whether they want the 002 node in advanced mode. If yes, confirm each custom result id, display label, trigger condition, and story meaning before changing the code.
+If the existing game has meaningful extra outcomes, such as perfect clear, timeout, draw, rank, or special loss, do not choose result ids automatically. Ask the creator whether they want the Funloom minigame node in advanced mode. If yes, confirm each custom result id, display label, trigger condition, and story meaning before changing the code.
 
 ## Common fixes
 

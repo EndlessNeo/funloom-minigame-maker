@@ -32,10 +32,10 @@ my-game/style.css
 
 ## Delivery rule
 
-The real integration test is uploading the ZIP to 002:
+The real integration test is uploading the ZIP to the Funloom interactive story creator tool:
 
-1. Open 002 interactive video tool.
-2. Upload ZIP in `资源 > 小游戏`.
+1. Open the Funloom interactive story creator tool.
+2. Upload the ZIP in the minigame resources area.
 3. Create or select a minigame node.
 4. Select the uploaded resource.
 5. Configure variable mutations for the declared result states.

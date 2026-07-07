@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package a Funloom/002 minigame source directory as an upload ZIP."""
+"""Package a Funloom minigame source directory as an upload ZIP."""
 
 from __future__ import annotations
 
@@ -62,17 +62,17 @@ def write_integration(
         result_id for result_id in result_ids if result_id not in {"success", "failure"}
     ]
     mode_text = (
-        "Advanced mode: switch the 002 minigame node to advanced mode and add "
+        "Advanced mode: switch the Funloom minigame node to advanced mode and add "
         f"these custom result ids first: {', '.join(custom_results)}."
         if custom_results
         else "Basic mode: keep the default success/failure exits."
     )
     landscape_text = (
-        "Yes. Keep the in-game landscape prompt and test landscape playback in 002/platform player."
+        "Yes. Keep the in-game landscape prompt and test landscape playback in the Funloom player."
         if forced_landscape
         else "No. The game should remain responsive in portrait and landscape."
     )
-    text = f"""# 002 Minigame Node Integration
+    text = f"""# Funloom Minigame Node Integration
 
 ## Upload File
 
@@ -84,9 +84,9 @@ def write_integration(
 - Results: {result_text}
 - Mode: {mode_text}
 
-## 002 Test Steps
+## Funloom Test Steps
 
-1. Open the 002 interactive video tool.
+1. Open the Funloom interactive story creator tool.
 2. Upload the ZIP in Resources > Minigames.
 3. Create or select a minigame node.
 4. Select this uploaded minigame resource.
@@ -98,7 +98,7 @@ def write_integration(
 ## Notes
 
 - The minigame only returns a result string; it does not directly modify story variables.
-- Unknown or undeclared results are rejected by the 002 runtime.
+- Unknown or undeclared results are rejected by the Funloom runtime.
 - Forced landscape: {landscape_text}
 """
     (output / "INTEGRATION.md").write_text(text, encoding="utf-8")
@@ -119,7 +119,7 @@ def run_validator(skill_dir: Path, target: Path, result_ids: list[str]) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Package a Funloom/002 minigame source directory.")
+    parser = argparse.ArgumentParser(description="Package a Funloom minigame source directory.")
     parser.add_argument("source", help="Source directory with root index.html")
     parser.add_argument("--name", default="funloom-minigame", help="Output ZIP base name")
     parser.add_argument("--output", default="output", help="Output directory")

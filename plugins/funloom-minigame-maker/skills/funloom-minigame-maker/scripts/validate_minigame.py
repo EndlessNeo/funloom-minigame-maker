@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a Funloom/002 minigame source directory or ZIP."""
+"""Validate a Funloom minigame source directory or ZIP."""
 
 from __future__ import annotations
 
@@ -197,7 +197,7 @@ def validate(path: Path, result_ids: list[str]) -> int:
 
         non_ascii = [file.relative_to(root).as_posix() for file in files if not file.relative_to(root).as_posix().isascii()]
         if non_ascii:
-            warn("non-ASCII file names are present; ensure 002 upload and playback paths are tested")
+            warn("non-ASCII file names are present; ensure Funloom upload and playback paths are tested")
             for name in non_ascii:
                 print(f"       {name}")
 
@@ -212,7 +212,7 @@ def validate(path: Path, result_ids: list[str]) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Validate a Funloom/002 minigame directory or ZIP.")
+    parser = argparse.ArgumentParser(description="Validate a Funloom minigame directory or ZIP.")
     parser.add_argument("path", help="Source directory or ZIP path")
     parser.add_argument(
         "--results",

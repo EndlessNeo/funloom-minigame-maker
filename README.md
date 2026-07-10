@@ -56,11 +56,18 @@
 
 ## 安装到 Codex
 
-在 Windows PowerShell 里如果 `codex.ps1` 被执行策略拦截，可以使用 `cmd /c`：
+Windows PowerShell 用户：如果 `codex.ps1` 被执行策略拦截，可以使用 `cmd /c`：
 
 ```powershell
 cmd /c codex plugin marketplace add EndlessNeo/funloom-minigame-maker --ref main
 cmd /c codex plugin add funloom-minigame-maker@funloom-codex
+```
+
+macOS / Linux 用户在终端里直接运行：
+
+```bash
+codex plugin marketplace add EndlessNeo/funloom-minigame-maker --ref main
+codex plugin add funloom-minigame-maker@funloom-codex
 ```
 
 安装后开启一个新的 Codex 对话，让插件说明被重新加载。
@@ -124,9 +131,18 @@ Copy-Item adapters\cursor\.cursor\rules\funloom-minigame-maker.mdc .cursor\rules
 
 Codex 已安装用户更新：
 
+Windows PowerShell 用户：
+
 ```powershell
 cmd /c codex plugin marketplace upgrade funloom-codex
 cmd /c codex plugin add funloom-minigame-maker@funloom-codex
+```
+
+macOS / Linux 用户：
+
+```bash
+codex plugin marketplace upgrade funloom-codex
+codex plugin add funloom-minigame-maker@funloom-codex
 ```
 
 Claude 用户重新复制 `adapters/claude/skills/funloom-minigame-maker` 到 `.claude/skills`。

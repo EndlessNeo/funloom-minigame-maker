@@ -7,12 +7,13 @@
   <style>
     * { box-sizing: border-box; touch-action: manipulation; }
     html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: #0f172a; color: white; font-family: system-ui, sans-serif; }
-    main { min-height: 100vh; min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; padding: 12px; }
+    main { width: 100%; min-height: 100vh; min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; padding: 12px; }
     .hud { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
     .hud span { min-width: 92px; text-align: center; padding: 8px 10px; border-radius: 8px; background: rgba(255,255,255,.1); }
     canvas { width: 100%; height: 100%; min-height: 320px; border-radius: 12px; background: #111827; border: 1px solid rgba(255,255,255,.15); }
     .controls { display: grid; grid-template-columns: repeat(3, minmax(72px, 1fr)); gap: 8px; width: min(420px, 100%); justify-self: center; }
     button { min-height: 52px; border: 0; border-radius: 8px; background: #38bdf8; color: #082f49; font: inherit; font-weight: 900; }
+    @media (orientation: portrait) { canvas { min-height: min(58vh, 520px); } }
   </style>
 </head>
 <body>

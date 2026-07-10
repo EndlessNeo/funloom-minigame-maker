@@ -8,7 +8,7 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; min-height: 100%; background: #111827; color: #fff7ed; font-family: system-ui, sans-serif; }
     body { display: grid; place-items: center; padding: 18px; }
-    main { width: min(720px, 100%); display: grid; gap: 16px; }
+    main { width: min(720px, 100%); min-height: min(100dvh, 920px); align-content: center; display: grid; gap: 16px; }
     .card { border: 1px solid rgba(255,255,255,.14); border-radius: 12px; padding: clamp(18px, 5vw, 30px); background: #1f2937; }
     h1 { margin: 0 0 10px; font-size: clamp(26px, 7vw, 42px); }
     p { margin: 0; color: rgba(255,247,237,.74); line-height: 1.65; }
@@ -16,6 +16,7 @@
     .status span { padding: 8px 12px; border-radius: 8px; background: rgba(255,255,255,.1); }
     .answers { display: grid; gap: 10px; }
     button { min-height: 50px; border: 0; border-radius: 8px; padding: 12px 14px; background: #f59e0b; color: #111827; font: inherit; font-weight: 800; }
+    @media (orientation: landscape) { main { min-height: 0; } }
   </style>
 </head>
 <body>

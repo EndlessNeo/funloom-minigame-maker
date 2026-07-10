@@ -1,6 +1,7 @@
+---
 interface:
   display_name: "Funloom Minigame Maker"
   short_description: "Create or adapt ZIP minigames for Funloom nodes."
-  default_prompt: "Use $funloom-minigame-maker to create or adapt a Funloom-compatible minigame ZIP, choosing either basic success/failure or confirmed advanced custom results."
+  default_prompt: "Use $funloom-minigame-maker to create or adapt a Funloom-compatible minigame ZIP, first confirming the interactive video project orientation and then choosing either basic success/failure or confirmed advanced custom results."
 policy:
   allow_implicit_invocation: true

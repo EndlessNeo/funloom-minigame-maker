@@ -21,8 +21,9 @@ The minigame must run inside the Funloom player iframe and report one final resu
   - asset mode: multi-file ZIP, single-file HTML, or supplied assets;
   - result mode and exact result ids/labels/trigger conditions;
   - PC and mobile controls;
-  - orientation: responsive by default, forced landscape only when justified;
+  - interactive video project orientation: `landscape` or `portrait`;
   - output directory.
+- Ask only for the interactive video project's playback orientation. Do not propose a per-minigame forced-orientation override; Funloom minigame nodes inherit the project orientation.
 - Ask for an output directory in chat. If the user has no preference, recommend:
   - Windows: `%USERPROFILE%\FunloomMinigames\<game-slug>`
   - macOS/Linux: `~/FunloomMinigames/<game-slug>`
@@ -121,13 +122,13 @@ python scripts/validate_minigame.py path/to/game-or-zip --results perfect,timeou
 Package a basic source directory:
 
 ```bash
-python scripts/package_minigame.py path/to/source --name my-game --output output
+python scripts/package_minigame.py path/to/source --name my-game --output output --orientation landscape
 ```
 
 Package an advanced source directory:
 
 ```bash
-python scripts/package_minigame.py path/to/source --name my-game --output output --results perfect,timeout
+python scripts/package_minigame.py path/to/source --name my-game --output output --orientation portrait --results perfect,timeout
 ```
 
 The package script writes:
@@ -148,7 +149,7 @@ When delivering a minigame ZIP or adapted source, report:
 - Declared result ids, labels, trigger conditions, and story meanings.
 - PC controls.
 - Mobile controls.
-- Whether forced landscape is used.
+- Confirmed interactive video project orientation: landscape or portrait.
 - Validation command and result.
 - Funloom testing steps:
   - upload the ZIP to minigame resources;

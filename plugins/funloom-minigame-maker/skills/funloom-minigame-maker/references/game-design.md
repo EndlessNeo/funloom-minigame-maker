@@ -40,6 +40,11 @@ Mobile mini-program WebView:
 
 ## Orientation
 
-Default to responsive layout that works in portrait and landscape.
+Confirm the interactive video project's playback orientation before implementation:
 
-Use forced landscape only when it materially improves the game, such as horizontal runners, wide battle lanes, or precision movement games. If forced landscape is used, add a visible in-game prompt and mention it in delivery notes.
+- `landscape`: design the primary experience for a 16:9 horizontal stage. It must work on PC and on mobile when the user holds the phone horizontally.
+- `portrait`: design the primary experience for a 9:16 vertical stage. It must work in the mobile mini-program vertical stage and remain centered when previewed on wider screens.
+
+The minigame must inherit the Funloom project's playback orientation. Do not add a per-minigame forced orientation or an in-game rotate prompt by default.
+
+Templates should still be fluid inside the iframe because the platform supplies the actual stage size. If the requested gameplay conflicts with the confirmed project orientation, pause and suggest a gameplay adjustment before writing code; for example, turn a wide runner into lane taps, quick decisions, or a compact vertical dodge game for a portrait project.

@@ -20,6 +20,7 @@ button {
 .game-shell {
   min-height: 100vh;
   min-height: 100dvh;
+  width: 100%;
   display: grid;
   grid-template-rows: auto 1fr auto;
   gap: 12px;
@@ -117,5 +118,11 @@ button {
 @media (min-width: 900px) {
   .game-shell {
     padding-inline: 36px;
+  }
+}
+
+@media (orientation: portrait) {
+  .stage {
+    min-height: min(58vh, 520px);
   }
 }

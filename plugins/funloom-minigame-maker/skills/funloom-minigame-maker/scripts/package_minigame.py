@@ -57,9 +57,16 @@ def write_zip(source: Path, zip_path: Path) -> None:
 def write_integration(
     output: Path,
     zip_name: str,
-    forced_landscape: bool,
+    orientation: str | bool,
     result_ids: list[str],
 ) -> None:
+    project_orientation = (
+        "landscape"
+        if orientation is True
+        else "portrait"
+        if str(orientation).strip().lower() == "portrait"
+        else "landscape"
+    )
     result_text = ", ".join(f"`{result_id}`" for result_id in result_ids)
     is_basic_mode = result_ids == ["success", "failure"]
     mode_text = (
@@ -71,10 +78,10 @@ def write_integration(
             f"{', '.join(result_ids)}."
         )
     )
-    landscape_text = (
-        "Yes. Keep the in-game landscape prompt and test landscape playback in the Funloom player."
-        if forced_landscape
-        else "No. The game should remain responsive in portrait and landscape."
+    orientation_test_text = (
+        "Test the PC stage and mobile horizontal stage."
+        if project_orientation == "landscape"
+        else "Test the mobile vertical stage and centered desktop preview."
     )
     text = f"""# Funloom Minigame Node Integration
 
@@ -82,6 +89,7 @@ def write_integration(
 
 - ZIP: `{zip_name}`
 - Entry: ZIP root `index.html`
+- Project playback orientation: {project_orientation}
 
 ## Declared Results
 
@@ -103,7 +111,8 @@ def write_integration(
 
 - The minigame only returns a result string; it does not directly modify story variables.
 - Unknown or undeclared results are rejected by the Funloom runtime.
-- Forced landscape: {landscape_text}
+- The minigame inherits the Funloom project playback orientation; do not configure a per-minigame override.
+- Orientation test: {orientation_test_text}
 """
     (output / "INTEGRATION.md").write_text(text, encoding="utf-8")
 
@@ -139,7 +148,13 @@ def main() -> int:
     parser.add_argument(
         "--forced-landscape",
         action="store_true",
-        help="Mention forced landscape in INTEGRATION.md",
+        help="Deprecated compatibility alias for --orientation landscape",
+    )
+    parser.add_argument(
+        "--orientation",
+        choices=("landscape", "portrait"),
+        default="landscape",
+        help="Interactive video project playback orientation inherited by this minigame",
     )
     parser.add_argument(
         "--no-copy-source",
@@ -165,7 +180,8 @@ def main() -> int:
         copy_source(source, output / "source")
 
     write_zip(source, zip_path)
-    write_integration(output, zip_path.name, args.forced_landscape, args.results)
+    orientation = "landscape" if args.forced_landscape else args.orientation
+    write_integration(output, zip_path.name, orientation, args.results)
     run_validator(skill_dir, zip_path, args.results)
 
     print(f"[OK] ZIP written: {zip_path}")

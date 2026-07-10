@@ -2,6 +2,6 @@
 interface:
   display_name: "Funloom Minigame Maker"
   short_description: "Create or adapt ZIP minigames for Funloom nodes."
-  default_prompt: "Use $funloom-minigame-maker to create or adapt a Funloom-compatible minigame ZIP, first confirming the interactive video project orientation and then choosing either basic success/failure or confirmed advanced custom results."
+  default_prompt: "Use $funloom-minigame-maker to create or adapt a Funloom-compatible minigame ZIP. If the project shape is unclear, ask: “您所需要设计的互动影游是横屏影游还是竖屏影游？这会涉及到后边小游戏的呈现方式。”"
 policy:
   allow_implicit_invocation: true

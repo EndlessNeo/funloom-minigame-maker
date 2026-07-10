@@ -67,6 +67,9 @@ def write_integration(
         if str(orientation).strip().lower() == "portrait"
         else "landscape"
     )
+    interactive_video_shape = (
+        "竖屏影游" if project_orientation == "portrait" else "横屏影游"
+    )
     result_text = ", ".join(f"`{result_id}`" for result_id in result_ids)
     is_basic_mode = result_ids == ["success", "failure"]
     mode_text = (
@@ -79,9 +82,9 @@ def write_integration(
         )
     )
     orientation_test_text = (
-        "Test the PC stage and mobile horizontal stage."
+        "Test the PC stage and mobile horizontal stage for 横屏影游."
         if project_orientation == "landscape"
-        else "Test the mobile vertical stage and centered desktop preview."
+        else "Test the mobile vertical stage and centered desktop preview for 竖屏影游."
     )
     text = f"""# Funloom Minigame Node Integration
 
@@ -89,7 +92,7 @@ def write_integration(
 
 - ZIP: `{zip_name}`
 - Entry: ZIP root `index.html`
-- Project playback orientation: {project_orientation}
+- 互动影游方向：{interactive_video_shape}
 
 ## Declared Results
 
@@ -111,8 +114,8 @@ def write_integration(
 
 - The minigame only returns a result string; it does not directly modify story variables.
 - Unknown or undeclared results are rejected by the Funloom runtime.
-- The minigame inherits the Funloom project playback orientation; do not configure a per-minigame override.
-- Orientation test: {orientation_test_text}
+- The minigame follows the Funloom interactive video's 横屏影游/竖屏影游 shape; do not configure a separate minigame override.
+- Shape test: {orientation_test_text}
 """
     (output / "INTEGRATION.md").write_text(text, encoding="utf-8")
 

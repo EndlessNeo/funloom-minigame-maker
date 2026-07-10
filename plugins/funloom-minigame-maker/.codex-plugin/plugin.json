@@ -1,6 +1,6 @@
 {
   "name": "funloom-minigame-maker",
-  "version": "0.3.0",
+  "version": "4.0.0",
   "description": "Create, adapt, validate, and package minigames for the Funloom interactive story creator tool.",
   "author": {
     "name": "Neo"

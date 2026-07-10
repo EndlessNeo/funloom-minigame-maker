@@ -38,13 +38,15 @@ Mobile mini-program WebView:
 - Avoid right-click and file download flows.
 - Keep all important UI inside the iframe viewport.
 
-## Orientation
+## Interactive Video Shape
 
-Confirm the interactive video project's playback orientation before implementation:
+Confirm the interactive video's shape before implementation. If it is not clear from the current project or user request, ask exactly:
 
-- `landscape`: design the primary experience for a 16:9 horizontal stage. It must work on PC and on mobile when the user holds the phone horizontally.
-- `portrait`: design the primary experience for a 9:16 vertical stage. It must work in the mobile mini-program vertical stage and remain centered when previewed on wider screens.
+> 您所需要设计的互动影游是横屏影游还是竖屏影游？这会涉及到后边小游戏的呈现方式。
 
-The minigame must inherit the Funloom project's playback orientation. Do not add a per-minigame forced orientation or an in-game rotate prompt by default.
+- 横屏影游：design the primary experience for a 16:9 horizontal stage. It must work on PC and on mobile when the user holds the phone horizontally.
+- 竖屏影游：design the primary experience for a 9:16 vertical stage. It must work in the mobile mini-program vertical stage and remain centered when previewed on wider screens.
 
-Templates should still be fluid inside the iframe because the platform supplies the actual stage size. If the requested gameplay conflicts with the confirmed project orientation, pause and suggest a gameplay adjustment before writing code; for example, turn a wide runner into lane taps, quick decisions, or a compact vertical dodge game for a portrait project.
+The minigame must inherit the Funloom interactive video's shape. Do not add a per-minigame forced orientation or an in-game rotate prompt by default.
+
+Templates should still be fluid inside the iframe because the platform supplies the actual stage size. If the requested gameplay conflicts with the confirmed interactive video shape, pause and suggest a gameplay adjustment before writing code; for example, turn a wide runner into lane taps, quick decisions, or a compact vertical dodge game for a 竖屏影游.

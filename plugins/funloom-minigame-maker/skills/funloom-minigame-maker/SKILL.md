@@ -21,9 +21,11 @@ The minigame must run inside the Funloom player iframe and report one final resu
   - asset mode: multi-file ZIP, single-file HTML, or supplied assets;
   - result mode and exact result ids/labels/trigger conditions;
   - PC and mobile controls;
-  - interactive video project orientation: `landscape` or `portrait`;
+  - 互动影游形态：横屏影游或竖屏影游；
   - output directory.
-- Ask only for the interactive video project's playback orientation. Do not propose a per-minigame forced-orientation override; Funloom minigame nodes inherit the project orientation.
+- When the interaction video shape is not clear, ask exactly: “您所需要设计的互动影游是横屏影游还是竖屏影游？这会涉及到后边小游戏的呈现方式。”
+- Do not ask users with internal terms such as `landscape`, `portrait`, `playback orientation`, or “项目播放方向”. Map 横屏影游 to the internal `landscape` package option and 竖屏影游 to the internal `portrait` package option.
+- Ask only for the interactive video's 横屏影游/竖屏影游 shape. Do not propose a per-minigame forced-orientation override; Funloom minigame nodes inherit the interactive video's shape.
 - Ask for an output directory in chat. If the user has no preference, recommend:
   - Windows: `%USERPROFILE%\FunloomMinigames\<game-slug>`
   - macOS/Linux: `~/FunloomMinigames/<game-slug>`
@@ -149,7 +151,7 @@ When delivering a minigame ZIP or adapted source, report:
 - Declared result ids, labels, trigger conditions, and story meanings.
 - PC controls.
 - Mobile controls.
-- Confirmed interactive video project orientation: landscape or portrait.
+- 互动影游形态：横屏影游或竖屏影游.
 - Validation command and result.
 - Funloom testing steps:
   - upload the ZIP to minigame resources;

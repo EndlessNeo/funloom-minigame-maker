@@ -25,6 +25,30 @@ package_minigame = load_script("package_minigame")
 
 
 class ResultModeTests(unittest.TestCase):
+    def test_skill_uses_creator_facing_orientation_prompt(self) -> None:
+        skill_text = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
+        self.assertIn(
+            "您所需要设计的互动影游是横屏影游还是竖屏影游？这会涉及到后边小游戏的呈现方式。",
+            skill_text,
+        )
+        self.assertNotIn("landscape 横屏", skill_text)
+        self.assertNotIn("portrait 竖屏", skill_text)
+
+    def test_integration_guide_uses_creator_facing_orientation_labels(self) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output = Path(temp_dir)
+            package_minigame.write_integration(
+                output,
+                "demo.zip",
+                "portrait",
+                ["success", "failure"],
+            )
+
+            text = (output / "INTEGRATION.md").read_text(encoding="utf-8")
+            self.assertIn("互动影游方向：竖屏影游", text)
+            self.assertNotIn("Project playback orientation", text)
+            self.assertNotIn("portrait", text)
+
     def test_custom_results_are_not_forced_to_include_basic_results(self) -> None:
         self.assertEqual(
             validate_minigame.parse_result_ids("perfect,timeout"),
